@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>جسور التفاؤل</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e8f5ff, #d1ebff);
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* الشعار */
+  .logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 150px;
+    height: auto;
+    z-index: 1000;
+  }
+  
+  /* عنوان الصفحة */
+  .page-title {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.5em;
+    margin: 20px 0;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  /* تذييل الصفحة */
+  .page-footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #495057;
+    font-size: 14px;
+    padding: 10px;
+    background: rgba(255,255,255,0.8);
+    border-top: 1px solid #dee2e6;
+    z-index: 100;
+    font-weight: bold;
+  }
+  
+  #container {
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 120px);
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  
+  /* النهر */
+  #river {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(160deg, #2f7fd1, #3fa6ff, #5bc0ff);
+    clip-path: polygon(0 10%, 20% 0%, 40% 12%, 60% 4%, 80% 14%, 100% 8%, 100% 90%, 80% 100%, 60% 88%, 40% 96%, 20% 86%, 0 92%);
+    animation: riverFlow 20s infinite linear;
+  }
+  
+  @keyframes riverFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  .bridge {
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    height: 120px;
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+    border: 2px solid #dee2e6;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 15px 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+  
+  .bridge:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    background: linear-gradient(45deg, #ffffff, #f8f9fa);
+  }
+  
+  .bridge-label {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 16px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .ticks-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: rgba(255,255,255,0.9);
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    position: relative;
+  }
+  
+  .tick {
+    width: 60px;
+    height: 70px;
+    background: #6c757d;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    flex-direction: column;
+    border: 2px solid transparent;
+  }
+  
+  .tick:hover {
+    background: #007bff;
+    transform: scale(1.05);
+    border-color: #ffffff;
+  }
+  
+  .tick.active {
+    background: #007bff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0,123,255,0.7);
+    border-color: #ffffff;
+  }
+  
+  .tick-number {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  }
+  
+  .tick-label {
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.2;
+    padding: 0 2px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    -webkit-text-stroke: 0.3px white;
+    paint-order: stroke fill;
+  }
+  
+  /* التسميات الخارجية */
+  .external-labels {
+    position: absolute;
+    width: calc(100% - 30px);
+    display: flex;
+    justify-content: space-between;
+    top: -35px;
+    right: 15px;
+    pointer-events: none;
+  }
+  
+  .external-label {
+    font-weight: bold;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .external-label.start {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+  }
+  
+  .external-label.end {
+    color: #51cf66;
+    background: rgba(81, 207, 102, 0.1);
+  }
+  
+  #popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 1000;
+    border: 2px solid #007bff;
+    text-align: center;
+  }
+  
+  #popup h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 20px;
+  }
+  
+  #popup p {
+    margin: 10px 0;
+    color: #495057;
+    line-height: 1.6;
+  }
+  
+  #p-degree {
+    font-weight: bold;
+    color: #007bff;
+    font-size: 18px;
+  }
+  
+  #popup button {
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  #popup button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+  }
+  
+  .sun {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, #ffeb3b, #ffc107);
+    border-radius: 50%;
+    box-shadow: 0 0 30px #ffeb3b;
+    animation: sunGlow 3s infinite alternate;
+  }
+  
+  @keyframes sunGlow {
+    0% { box-shadow: 0 0 30px #ffeb3b; }
+    100% { box-shadow: 0 0 50px #ffeb3b, 0 0 70px #ffc107; }
+  }
+  
+  .cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    animation: cloudMove 20s infinite linear;
+  }
+  
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+  }
+  
+  .cloud1 {
+    width: 100px;
+    height: 40px;
+    top: 30px;
+    left: 10%;
+    animation-duration: 25s;
+  }
+  
+  .cloud2 {
+    width: 120px;
+    height: 50px;
+    top: 80px;
+    left: 40%;
+    animation-duration: 30s;
+  }
+  
+  .cloud3 {
+    width: 80px;
+    height: 35px;
+    top: 150px;
+    left: 70%;
+    animation-duration: 20s;
+  }
+  
+  @keyframes cloudMove {
+    0% { transform: translateX(-100px); }
+    100% { transform: translateX(calc(100vw + 100px)); }
+  }
+  
+  #summary {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.95);
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 100;
+    border: 2px solid #28a745;
+  }
+  
+  #summary button {
+    margin-left: 10px;
+    padding: 8px 15px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- الشعار -->
+<img src="DASC_Logos_DASC_General.png" alt="دار الذكر المدارس" class="logo">
+
+<!-- عنوان الصفحة -->
+<h1 class="page-title">جسور التفاؤل</h1>
+
+<div id="container">
+  <div class="sun"></div>
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+  <div class="cloud cloud3"></div>
+  
+  <div id="river"></div>
+
+  <!-- الجسور الثلاثة -->
+  <div class="bridge" style="top:10%" data-title="إلى متى ستستمر المشكلة؟">
+    <div class="bridge-label">إلى متى ستستمر المشكلة؟</div>
+    <div class="ticks-container" id="ticks1">
+      <div class="external-labels">
+        <div class="external-label start">دائم</div>
+        <div class="external-label end">مؤقت</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bridge" style="top:40%" data-title="ما مدى نفاذ المشكلة؟">
+    <div class="bridge-label">ما مدى نفاذ المشكلة؟</div>
+    <div class="ticks-container" id="ticks2">
+      <div class="external-labels">
+        <div class="external-label start">شامل</div>
+        <div class="external-label end">جزئي</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bridge" style="top:70%" data-title="ما مقدار الفرق الذي يمكن أن يحققه مجهودي؟">
+    <div class="bridge-label">ما مقدار الفرق الذي يمكن أن يحققه مجهودي؟</div>
+    <div class="ticks-container" id="ticks3">
+      <div class="external-labels">
+        <div class="external-label start">صغير</div>
+        <div class="external-label end">كبير</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- البوب أب -->
+<div id="popup">
+  <h3 id="p-title"></h3>
+  <p id="p-degree"></p>
+  <p id="p-message"></p>
+  <button onclick="closePopup()">متابعة</button>
+</div>
+
+<!-- ملخص النتائج -->
+<div id="summary">
+  <span id="summary-text">لقد أكملت تقييم جميع الجسور!</span>
+  <button onclick="showFinalResults()">عرض النتائج النهائية</button>
+  <button onclick="resetAll()">بدء من جديد</button>
+</div>
+
+<!-- تذييل الصفحة -->
+<div class="page-footer">
+  تم الإعداد والبرمجة بواسطة مشرف مهارات القرن 21<br>مصطفى حسين
+</div>
+
+<script>
+// تخزين التقييمات
+let ratings = {
+  "إلى متى ستستمر المشكلة؟": 0,
+  "ما مدى نفاذ المشكلة؟": 0,
+  "ما مقدار الفرق الذي يمكن أن يحققه مجهودي؟": 0
+};
+
+// إنشاء التدريجات للجسور الثلاثة
+function createTicks() {
+  const tickContainers = ['ticks1', 'ticks2', 'ticks3'];
+  const questions = [
+    "إلى متى ستستمر المشكلة؟",
+    "ما مدى نفاذ المشكلة؟", 
+    "ما مقدار الفرق الذي يمكن أن يحققه مجهودي؟"
+  ];
+
+  tickContainers.forEach((containerId, index) => {
+    const container = document.getElementById(containerId);
+    // مسح فقط المربعات وليس التسميات الخارجية
+    const existingTicks = container.querySelectorAll('.tick');
+    existingTicks.forEach(tick => tick.remove());
+    
+    const question = questions[index];
+    
+    for (let i = 1; i <= 10; i++) {
+      const tick = document.createElement('div');
+      tick.className = 'tick';
+      tick.dataset.value = i;
+      tick.setAttribute('data-value', i);
+      
+      // إضافة الرقم فقط (بدون التسمية)
+      const tickNumber = document.createElement('div');
+      tickNumber.className = 'tick-number';
+      tickNumber.textContent = i;
+      
+      tick.appendChild(tickNumber);
+      
+      tick.onclick = (ev) => {
+        // إزالة النشاط من جميع التدريجات في هذا الجسر فقط
+        const allTicks = container.querySelectorAll('.tick');
+        allTicks.forEach(t => t.classList.remove('active'));
+        
+        // إضافة النشاط للتدريج المختار
+        ev.target.classList.add('active');
+        
+        // حفظ التقييم
+        ratings[question] = i;
+        saveRatings();
+        
+        showPopup(question, i);
+        checkCompletion();
+      };
+      
+      container.appendChild(tick);
+    }
+  });
+}
+
+function getMessage(question, level) {
+  const messages = {
+    "إلى متى ستستمر المشكلة؟": [
+      "المشكلة تبدو دائمة، لكن تذكر أن كل شيء يتغير مع الوقت",
+      "هناك أمل في التغير، استمر في البحث عن حلول",
+      "المشكلة مؤقتة وسوف تزول قريباً",
+      "رائع! هذا التفاؤل يساعد في تجاوز الصعوبات بسرعة"
+    ],
+    "ما مدى نفاذ المشكلة؟": [
+      "المشكلة شاملة، لكن يمكنك التركيز على الجوانب القابلة للحل",
+      "ابدأ بحل الأجزاء الصغيرة أولاً",
+      "المشكلة جزئية ويمكن التعامل معها بفعالية",
+      "ممتاز! التركيز على الحلول بدلاً من المشكلة"
+    ],
+    "ما مقدار الفرق الذي يمكن أن يحققه مجهودي؟": [
+      "كل مجهود يحدث فرقاً، حتى لو بدا صغيراً",
+      "استمر في المحاولة، فالتغيير يحدث تدريجياً",
+      "مجهودك سيحدث فرقاً كبيراً مع الاستمرارية",
+      "رائع! هذا الاعتقاد يضاعف من تأثير مجهودك"
+    ]
+  };
+
+  const questionMessages = messages[question];
+  
+  if (level <= 3) return questionMessages[0];
+  if (level <= 6) return questionMessages[1];
+  if (level <= 8) return questionMessages[2];
+  return questionMessages[3];
+}
+
+function showPopup(title, degree) {
+  document.getElementById('p-title').textContent = title;
+  document.getElementById('p-degree').textContent = `التقييم: ${degree}/10`;
+  document.getElementById('p-message').textContent = getMessage(title, degree);
+  document.getElementById('popup').style.display = 'block';
+}
+
+function closePopup() {
+  document.getElementById('popup').style.display = 'none';
+}
+
+function saveRatings() {
+  localStorage.setItem('optimismRatings', JSON.stringify(ratings));
+}
+
+function loadRatings() {
+  const saved = localStorage.getItem('optimismRatings');
+  if (saved) {
+    ratings = JSON.parse(saved);
+    // تطبيق التقييمات المحفوظة
+    const questions = [
+      "إلى متى ستستمر المشكلة؟",
+      "ما مدى نفاذ المشكلة؟", 
+      "ما مقدار الفرق الذي يمكن أن يحققه مجهودي؟"
+    ];
+    
+    questions.forEach((question, index) => {
+      const rating = ratings[question];
+      if (rating > 0) {
+        const container = document.getElementById(`ticks${index + 1}`);
+        const tick = container.querySelector(`.tick[data-value="${rating}"]`);
+        if (tick) {
+          container.querySelectorAll('.tick').forEach(t => t.classList.remove('active'));
+          tick.classList.add('active');
+        }
+      }
+    });
+    checkCompletion();
+  }
+}
+
+function checkCompletion() {
+  const allRated = Object.values(ratings).every(rating => rating > 0);
+  if (allRated) {
+    document.getElementById('summary').style.display = 'block';
+  }
+}
+
+function showFinalResults() {
+  const total = Object.values(ratings).reduce((a, b) => a + b, 0);
+  const average = total / 3;
+  
+  let finalMessage = `نتيجتك النهائية: ${average.toFixed(1)}/10\n\n`;
+  finalMessage += `• استمرارية المشكلة: ${ratings["إلى متى ستستمر المشكلة؟"]}/10\n`;
+  finalMessage += `• مدى نفاذ المشكلة: ${ratings["ما مدى نفاذ المشكلة؟"]}/10\n`;
+  finalMessage += `• تأثير مجهودك: ${ratings["ما مقدار الفرق الذي يمكن أن يحققه مجهودي؟"]}/10\n\n`;
+  
+  if (average <= 4) {
+    finalMessage += "💡 نصيحة: حاول رؤية الجوانب الإيجابية، فكل مشكلة لها حل!";
+  } else if (average <= 7) {
+    finalMessage += "🌟 جيد! أنت على الطريق الصحيح، استمر في التفكير الإيجابي!";
+  } else {
+    finalMessage += "🎉 رائع! هذا مستوى استثنائي من التفاؤل والثقة في القدرات!";
+  }
+  
+  alert(finalMessage);
+}
+
+function resetAll() {
+  if (confirm("هل تريد حقاً بدء التقييم من جديد؟")) {
+    ratings = {
+      "إلى متى ستستمر المشكلة؟": 0,
+      "ما مدى نفاذ المشكلة؟": 0,
+      "ما مقدار الفرق الذي يمكن أن يحققه مجهودي؟": 0
+    };
+    
+    document.querySelectorAll('.tick').forEach(tick => {
+      tick.classList.remove('active');
+    });
+    
+    document.getElementById('summary').style.display = 'none';
+    localStorage.removeItem('optimismRatings');
+  }
+}
+
+// تهيئة الصفحة
+window.addEventListener('load', function() {
+  createTicks();
+  loadRatings();
+});
+
+// إغلاق البوبアップ عند النقر خارجها
+window.addEventListener('click', function(event) {
+  const popup = document.getElementById('popup');
+  if (event.target === popup) {
+    closePopup();
+  }
+});
+</script>
+</body>
+</html>
